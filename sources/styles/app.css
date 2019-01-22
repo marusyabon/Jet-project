@@ -56,3 +56,41 @@
 	font-size:20px;
 	vertical-align:middle;
 }
+
+.user_icon {
+    float: left;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: thistle;
+}
+
+.user_name,
+.user_email {
+    margin: 5px 0;
+    padding-left: 50px;
+    line-height: 14px;
+}
+
+.user_name {
+    font-size: 14px;
+}
+
+.user_email {
+    font-size: 11px;
+}
+
+.users_list {
+    padding-top: 15px;
+}
+
+.users_list .webix_list_item {
+    position: relative;
+}
+
+.remove_contact {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    margin-top: -10px;
+}

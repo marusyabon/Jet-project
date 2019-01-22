@@ -3,7 +3,7 @@ import {contacts} from "models/contacts";
 
 export default class ContactsView extends JetView {
 	config() {
-		let userInfo = "<div class='user_icon'></div><p class='user_name'>#Name#</p><p class='user_email'>#Email#</p><span class='remove_contact webix_icon wxi-close'></span>";
+		let userInfo = "<div class='user_icon'></div><p class='user_name'>#FirstName# #LastName#</p><p class='user_email'>#Email#</p><span class='remove_contact webix_icon wxi-close'></span>";
 		let list = {
 			rows: [
 				{

@@ -22,6 +22,10 @@ if (!BUILD_AS_MODULE) {
 		
 		const app = new MyApp();
 		app.use(plugins.Locale);
-		app.render(); 
+		app.render();
+		
+		app.attachEvent("app:error:resolve", (name, error) => {
+			window.console.error(error);
+		});
 	});
 }
