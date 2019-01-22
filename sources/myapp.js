@@ -8,7 +8,7 @@ export default class MyApp extends JetApp {
 			version : VERSION,
 			router 	: BUILD_AS_MODULE ? EmptyRouter : HashRouter,
 			debug 	: !PRODUCTION,
-			start 	: "/top/contacts"
+			start 	: "/top/contacts.contacts"
 		};
 
 		super({ ...defaults, ...config });
@@ -18,7 +18,7 @@ export default class MyApp extends JetApp {
 if (!BUILD_AS_MODULE) {
 
 	webix.ready(() => {
-		webix.debug({events: true, size:true});
+		// webix.debug({events: true, size:true});
 		
 		const app = new MyApp();
 		app.use(plugins.Locale);

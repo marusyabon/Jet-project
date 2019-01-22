@@ -1,5 +1,6 @@
 import {JetView} from "webix-jet";
 import {contacts} from "models/contacts";
+import ContactDetails from "./details";
 
 export default class ContactsView extends JetView {
 	config() {
@@ -20,7 +21,7 @@ export default class ContactsView extends JetView {
 						"remove_contact": function (e, id) {
 							if (this.getSelectedId() == id) {
 								let id = contacts.getFirstId();
-								id ? this.select(id) : this.$scope.app.show("/top/contacts");
+								id ? this.select(id) : this.$scope.app.show("/top/contacts.contacts");
 								this.$scope.app.callEvent("onContactDelete");
 							}
 							contacts.remove(id);
@@ -49,8 +50,12 @@ export default class ContactsView extends JetView {
 			]
 		};
 		return {
+			margin: 20,
 			cols: [
-				list
+				list,
+				{ 
+					$subview: ContactDetails        
+				}
 			]
 		};
 	}
