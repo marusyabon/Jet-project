@@ -3,11 +3,11 @@ import {JetView, plugins} from "webix-jet";
 export default class TopView extends JetView{
 	config(){
 
-		var header = {
+		let header = {
 			type:"header", template:this.app.config.name, css:"webix_header app_header"
 		};
 
-		var menu = {
+		let menu = {
 			view:"menu", id:"top:menu", 
 			css:"app_menu",
 			width:180, layout:"y", select:true,
@@ -15,11 +15,11 @@ export default class TopView extends JetView{
 			data:[
 				{ value:"Contacts", id:"contacts.contacts", icon:"fas fa-user" },
 				{ value:"Settings", id:"settings", icon:"fas fa-cog" },
-				{ value:"Activities", id:"activities", icon:"fas fa-calendar-alt" }
+				{ value:"Activities", id:"activities.activities", icon:"fas fa-calendar-alt" }
 			]
 		};
 
-		var ui = {
+		let ui = {
 			type:"clean", paddingX:5, css:"app_layout", cols:[
 				{ paddingX:5, paddingY:10, rows: [ {css:"webix_shadow_medium", rows:[header, menu]} ]},
 				{ type:"wide", paddingY:10, paddingX:5, rows:[

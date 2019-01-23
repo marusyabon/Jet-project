@@ -17,14 +17,14 @@ export default class ContactDetails extends JetView {
 					label: "Delete",
 					type: "icon",
 					icon: "fas fa-trash-alt",
-					inputWidth: 100
+					width: 100
 				},
 				{
 					view: "button",
 					label: "Edit",
 					type: "icon",
 					icon: "fas fa-edit",
-					inputWidth: 100
+					width: 100
 				}
 			]
 		};
