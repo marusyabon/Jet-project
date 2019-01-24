@@ -1,4 +1,5 @@
 import { JetView } from "webix-jet";
+import ContactsForm from "./contacts_form";
 import { activities } from "models/activities";
 import { activitytypes } from "models/activitytypes";
 import { contacts } from "models/contacts";
@@ -27,10 +28,10 @@ export default class ActivitiesView extends JetView {
 					label: "Add activity",
 					type: "icon",
 					icon: "fas fa-plus-square",
-					width: 100
+					width: 100,
+					click: () => { this.contForm.showWindow(); }
 				}
 			]
-
 		};
 
 		let actTable = {
@@ -52,9 +53,9 @@ export default class ActivitiesView extends JetView {
 				},
 				{
 					id: "DueDate",
-					header: ["Due date", { content: "dateRangeFilter" }],
-					sort:"int",
-					format:webix.Date.dateToStr("%d %M %y")
+					header: ["Due date", { content: "datepickerFilter" }],
+					sort: "date",
+					format: webix.Date.dateToStr("%d %M %y")
 				},
 				{
 					id: "Details",
@@ -82,9 +83,9 @@ export default class ActivitiesView extends JetView {
 				}
 			],
 			onClick: {
-				// "wxi-pencil": (e, id) => {
-
-				// },
+				"wxi-pencil": (e, id) => {
+					this.contForm.showWindow(id);
+				},
 				"wxi-trash": function (e, id) {
 					webix.confirm({
 						title: "Remove this?",
@@ -107,10 +108,6 @@ export default class ActivitiesView extends JetView {
 
 	init(view) {
 		view.queryView("datatable").sync(activities);
-		// this.$$("actTable").sync(activities);
-	}
-
-	ready() {
-
+		this.contForm = this.ui(ContactsForm);
 	}
 }

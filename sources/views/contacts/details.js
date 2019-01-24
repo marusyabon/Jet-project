@@ -29,27 +29,15 @@ export default class ContactDetails extends JetView {
 			]
 		};
 
-		let contactAvatar = {
-			rows: [
-				{
-					width: 200,
-					height: 200,
-					css: { "background-color": "grey" }
-				},
-				{
-					view: "label",
-					css: "contact_status",
-					localId: "contactStatus",
-					align: "center"
-				}
-			]
-		};
-
-		let contactInfo = {
-			localId: "contactInfo",
+		let contactCard = {
+			localId: "contactCard",
 			template: contact => {
 				return (
-					`<div class="col icon_p">
+					`<div class="col contact_card">
+						<div class="contact_avatar" style="background-image: url(${contact.Photo ? contact.Photo : "https://cs.unc.edu/~csturton/HWSecurityatUNC/images/person.png"});"></div>
+						<p class="contact_status">${contact.status}</p>
+					</div>
+						<div class="col icon_p">
 						<p><i class="fas fa-envelope"></i>${contact.Email}</p>
 						<p><i class="fab fa-skype"></i>${contact.Skype}</p>
 						<p><i class="fas fa-tag"></i>${contact.Job}</p>
@@ -59,7 +47,7 @@ export default class ContactDetails extends JetView {
 						<p><i class="fas fa-calendar-alt"></i>${contact.Birthday}</p>
 						<p><i class="fas fa-map-marker-alt"></i>${contact.Address}</p>
 					</div>`
-				);
+				);	
 			}
 		};
 
@@ -69,17 +57,15 @@ export default class ContactDetails extends JetView {
 					cols: [contactTitle, {}, buttons]
 				},
 				{
-					cols: [contactAvatar, contactInfo]
+					height: 10
 				},
+				contactCard,
 				{}
 
 			]
 		};
 	}
 
-	init() {
-
-	}
 	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
@@ -91,10 +77,7 @@ export default class ContactDetails extends JetView {
 				contactData.status = statuses.getItem(contactData.StatusID).Value;
 
 				this.$$("contactTitle").setValue(contactData.FirstName + " " + contactData.LastName);
-				this.$$("contactInfo").setValues(contactData);
-				this.$$("contactStatus").setValue(contactData.status);
-
-
+				this.$$("contactCard").setValues(contactData);
 			}
 		});
 	}

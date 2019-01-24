@@ -104,8 +104,12 @@
     vertical-align: top;
 }
 
+.contact_card {
+    padding-top: 10px;
+}
+
 .icon_p {
-    padding-right: 20px;
+    padding-left: 20px;
 }
 
 .icon_p i {
@@ -113,4 +117,15 @@
 }
 
 .contact_status {
+    font-weight: bold;
+    text-align: center;
+}
+
+.contact_avatar {
+    border: 1px solid #ccc;
+    width: 200px;
+    height: 200px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
