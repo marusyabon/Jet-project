@@ -54,7 +54,7 @@ export default class ContactsView extends JetView {
 		this.$$("list").sync(contacts);
 	}
 
-	urlChange(view) {
+	urlChange() {
 		contacts.waitData.then(() => {
 			let id = this.getParam("id") || contacts.getFirstId();
 			if (id && contacts.exists(id)) {

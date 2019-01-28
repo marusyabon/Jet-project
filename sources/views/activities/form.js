@@ -28,16 +28,14 @@ export default class ContactsForm extends JetView {
 								value: new Date(),
 								name: "_Date",
 								localId: "_Date",
-								label: "Date",
-								format: "%d %M %y"
+								label: "Date"
 							},
 							{
 								view: "datepicker",
 								type: "time",
 								label: "Time",
 								localId: "_Time",
-								name: "_Time",
-								format: "%H:%i"
+								name: "_Time"
 							},
 						]
 					},
@@ -103,14 +101,13 @@ export default class ContactsForm extends JetView {
 	saveForm() {
 		let formView = this.$$("formView");
 		const values = formView.getValues();
-		
-		let _date = values._Date;
-		let _time = values._Time;
 
-		let h = _time.getHours(),
-            m = _time.getMinutes();
+		let h = values._Time.getHours(),
+			m = values._Time.getMinutes();
+			
+		values.DueDate = values._Date;
+		values.DueDate.setHours(h, m);
 
-		values.DueDate =  _date.setHours(h, m);
 
 		if (formView.validate()) {
 			values.id ? activities.updateItem(values.id, values) : activities.add(values);

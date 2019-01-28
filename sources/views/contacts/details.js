@@ -75,6 +75,9 @@ export default class ContactDetails extends JetView {
 			if (id && contacts.exists(id)) {
 				let contactData = webix.copy(contacts.getItem(id));
 				contactData.status = statuses.getItem(contactData.StatusID).Value;
+                
+				let format = webix.Date.dateToStr("%d-%m-%Y");
+				contactData.Birthday = format(contactData.Birthday);
 
 				this.$$("contactTitle").setValue(contactData.FirstName + " " + contactData.LastName);
 				this.$$("contactCard").setValues(contactData);
