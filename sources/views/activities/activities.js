@@ -1,5 +1,5 @@
 import { JetView } from "webix-jet";
-import ContactsForm from "./contacts_form";
+import ContactsForm from "./form";
 import { activities } from "models/activities";
 import { activitytypes } from "models/activitytypes";
 import { contacts } from "models/contacts";
@@ -11,7 +11,6 @@ export default class ActivitiesView extends JetView {
 				{
 					view: "tabbar",
 					value: "all",
-					autoWidth: true,
 					optionWidth: 110,
 					options: [
 						{ "id": "all", "value": "All" },
@@ -93,8 +92,8 @@ export default class ActivitiesView extends JetView {
 						callback: function (result) {
 							if (result) {
 								activities.remove(id);
-								return false;
 							}
+							return false;
 						}
 					});
 				}
@@ -106,8 +105,8 @@ export default class ActivitiesView extends JetView {
 		};
 	}
 
-	init(view) {
-		view.queryView("datatable").sync(activities);
+	init() {
+		this.$$("actTable").sync(activities);
 		this.contForm = this.ui(ContactsForm);
 	}
 }

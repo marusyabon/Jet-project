@@ -84,14 +84,18 @@ export default class ContactsForm extends JetView {
 
 			let values = webix.copy(activities.getItem(id));
 
-
-			let dateTime = new Date(values.DueDate);
+			let dateTime = values.DueDate;
 
 			values._Date = dateTime;
 			values._Time = dateTime;
 
 			formView.setValues(values);
-		} 
+		}
+
+		else {
+			this.$$("saveBtn").setValue("Add");
+			this.$$("formPopup").getHead().setHTML("Add activity");
+		}
 		
 		this.getRoot().show();
 	}
@@ -99,11 +103,14 @@ export default class ContactsForm extends JetView {
 	saveForm() {
 		let formView = this.$$("formView");
 		const values = formView.getValues();
+		
+		let _date = values._Date;
+		let _time = values._Time;
 
-		let timeFormat = webix.Date.dateToStr("%H:%i");
-		let dateFormat = webix.Date.dateToStr("%Y-%m-%d");
+		let h = _time.getHours(),
+            m = _time.getMinutes();
 
-		values.DueDate =  dateFormat(values._Date) + " " + timeFormat(values._Time);
+		values.DueDate =  _date.setHours(h, m);
 
 		if (formView.validate()) {
 			values.id ? activities.updateItem(values.id, values) : activities.add(values);
