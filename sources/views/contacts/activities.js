@@ -1,40 +1,13 @@
-import { JetView } from "webix-jet";
-import ActivitiesForm from "./form";
+import {JetView} from "webix-jet";
 import { activities } from "models/activities";
 import { activitytypes } from "models/activitytypes";
-import { contacts } from "models/contacts";
+import ActivitiesForm from "../activities/form";
 
-export default class ActivitiesView extends JetView {
+export default class ActivitiesTable extends JetView {
 	config() {
-		let tabBar = {
-			cols: [
-				{
-					view: "tabbar",
-					value: "all",
-					autoWidth: true,
-					optionWidth: 110,
-					options: [
-						{ "id": "all", "value": "All" },
-						{ "id": "overdue", "value": "Overdue" },
-						{ "id": "completed", "value": "Completed" },
-						{ "id": "today", "value": "Today" },
-						{ "id": "tomorrow", "value": "Tomorrow" },
-						{ "id": "this week", "value": "This week" },
-						{ "id": "this month", "value": "This month" }
-					]
-				},
-				{
-					view: "button",
-					label: "Add activity",
-					type: "icon",
-					icon: "fas fa-plus-square",
-					width: 100,
-					click: () => { this.actForm.showWindow(); }
-				}
-			]
-		};
 
-		let actTable = {
+		let _table = {
+			id: "Activities",
 			view: "datatable",
 			localId: "actTable",
 			select: true,
@@ -62,12 +35,6 @@ export default class ActivitiesView extends JetView {
 					sort: "text",
 					header: ["Details", { content: "textFilter" }],
 					fillspace: true
-				},
-				{
-					id: "ContactID",
-					sort: "text",
-					header: ["Contact", { content: "selectFilter" }],
-					options: contacts
 				},
 				{
 					id: "EditAct",
@@ -98,16 +65,43 @@ export default class ActivitiesView extends JetView {
 						}
 					});
 				}
-			},
+			}
+		};
+
+		let _button = {
+			view: "button",
+			label: "Add activity",
+			type: "icon",
+			css: "btn",
+			icon: "fas fa-plus-square",
+			width: 100,
+			click: () => { this.actForm.showWindow(); }
 		};
 
 		return {
-			rows: [tabBar, actTable]
+			rows: [
+				_table,
+				{ cols: [ {}, _button ] }
+			]
 		};
 	}
 
-	init(view) {
-		view.queryView("datatable").sync(activities);
+	init() {
 		this.actForm = this.ui(ActivitiesForm);
 	}
-}
+
+	urlChange(view, url) {
+        activities.waitData.then(() => {
+			let id = this.getParam("id", true);
+			let dTable = view.queryView("datatable");
+
+            if (id) {
+				dTable.sync(activities, () => {
+					dTable.filter((item) => {
+						return item.ContactID == id;
+					})
+				});
+            }
+        });
+    }
+};

@@ -129,3 +129,7 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.btn.webix_el_button button {
+    border: 1px solid #1787a2;
+}

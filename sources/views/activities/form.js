@@ -3,13 +3,13 @@ import { contacts } from "models/contacts";
 import { activities } from "models/activities";
 import { activitytypes } from "models/activitytypes";
 
-export default class ContactsForm extends JetView {
+export default class ActivitiesForm extends JetView {
 	config() {
 
 		return {
 			view: "window",
-			head: "Add activity",
 			localId: "formPopup",
+			head: "Add activity",
 			width: 600,
 			height: 400,
 			position:"center",
@@ -19,7 +19,7 @@ export default class ContactsForm extends JetView {
 				elements: [
 					{ view: "textarea", label: "Details", name: "Details" },
 					{ view: "combo", label: "Type", name: "TypeID", options: { body: { template: "#Value#", data: activitytypes } } },
-					{ view: "combo", label: "Contact", name: "ContactID", options: { body: { template: "#FirstName# #LastName#", data: contacts } } },
+					{ view: "combo", label: "Contact", name: "ContactID", localId: "ContactID", options: { body: { template: "#FirstName# #LastName#", data: contacts } } },
 					{
 						margin: 20,
 						cols: [
@@ -50,7 +50,7 @@ export default class ContactsForm extends JetView {
 						margin: 20,
 						cols: [
 							{
-								view: "button", value: "Add", type: "form", localId: "saveBtn",
+								view: "button", type: "form", localId: "saveBtn",
 								click: () => {
 									this.saveForm();
 								}
@@ -84,14 +84,27 @@ export default class ContactsForm extends JetView {
 
 			let values = webix.copy(activities.getItem(id));
 
-
-			let dateTime = new Date(values.DueDate);
+			let dateTime = values.DueDate;
 
 			values._Date = dateTime;
 			values._Time = dateTime;
 
 			formView.setValues(values);
-		} 
+		}
+
+		else {
+			this.$$("saveBtn").setValue("Add");
+			this.$$("formPopup").getHead().setHTML("Add activity");
+
+			// check if contact card is open
+
+			let _contactId = this.getParam("id", true);
+			if (_contactId) {
+				let targetContact = contacts.getItem(_contactId);
+				this.$$("ContactID").setValue(targetContact.id);
+				this.$$("ContactID").disable();
+			}
+		}
 		
 		this.getRoot().show();
 	}
@@ -99,11 +112,13 @@ export default class ContactsForm extends JetView {
 	saveForm() {
 		let formView = this.$$("formView");
 		const values = formView.getValues();
+		
+		let formatDate = webix.Date.dateToStr("%Y-%m-%d");
+		let formatTime = webix.Date.dateToStr("%H:%i");
+		let _date = formatDate(values._Date);
+		let _time = formatTime(values._Time)
 
-		let timeFormat = webix.Date.dateToStr("%H:%i");
-		let dateFormat = webix.Date.dateToStr("%Y-%m-%d");
-
-		values.DueDate =  dateFormat(values._Date) + " " + timeFormat(values._Time);
+		values.DueDate =  `${_date} ${_time}`;
 
 		if (formView.validate()) {
 			values.id ? activities.updateItem(values.id, values) : activities.add(values);

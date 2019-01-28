@@ -1,6 +1,5 @@
 import {JetView} from "webix-jet";
 import {contacts} from "models/contacts";
-import ContactDetails from "./details";
 
 export default class ContactsView extends JetView {
 	config() {
@@ -19,7 +18,7 @@ export default class ContactsView extends JetView {
 					},
 					on: {
 						"onAfterSelect": (id) => {
-							this.setParam("id", id, true);
+							this.show(`/top/contacts.contacts?id=${id}/contacts.details`);
 						}
 					},
 				},
@@ -28,10 +27,8 @@ export default class ContactsView extends JetView {
 					type: "form",
 					value: "Add",
 					click: () => {
-						contacts.add({
-							"Name": "",
-							"Email": "",
-						});
+						let id = this.getParam("id", true);
+						this.show(`/top/contacts.contacts?id=${id}&new=true/contacts.form`);
 					}
 				},
 				{
@@ -43,15 +40,20 @@ export default class ContactsView extends JetView {
 			margin: 20,
 			cols: [
 				list,
-				{ 
-					$subview: ContactDetails        
-				}
+				{ $subview: true }
 			]
 		};
 	}
 
-	init() {
+	init(view) {
 		this.$$("list").sync(contacts);
+
+		this.on(this.app, "onContactDelete", () => {
+            let id = contacts.getFirstId();
+			if (id) {
+				view.queryView("list").select(id);
+			}
+        })
 	}
 
 	urlChange(view) {
