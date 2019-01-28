@@ -105,7 +105,10 @@ export default class ContactDetails extends JetView {
                 contactData.status = statuses.getItem(contactData.StatusID).Value;
 
                 this.$$("contactTitle").setValue(contactData.FirstName + " " + contactData.LastName);
-                this.$$("contactCard").setValues(contactData);
+				this.$$("contactCard").setValues(contactData);
+				
+				let format = webix.Date.dateToStr("%d-%m-%Y");
+				contactData.Birthday = format(contactData.Birthday);
             }
         });
     }

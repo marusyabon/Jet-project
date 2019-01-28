@@ -28,16 +28,14 @@ export default class ActivitiesForm extends JetView {
 								value: new Date(),
 								name: "_Date",
 								localId: "_Date",
-								label: "Date",
-								format: "%d %M %y"
+								label: "Date"
 							},
 							{
 								view: "datepicker",
 								type: "time",
 								label: "Time",
 								localId: "_Time",
-								name: "_Time",
-								format: "%H:%i"
+								name: "_Time"
 							},
 						]
 					},
@@ -113,12 +111,12 @@ export default class ActivitiesForm extends JetView {
 		let formView = this.$$("formView");
 		const values = formView.getValues();
 		
-		let formatDate = webix.Date.dateToStr("%Y-%m-%d");
-		let formatTime = webix.Date.dateToStr("%H:%i");
-		let _date = formatDate(values._Date);
-		let _time = formatTime(values._Time)
+		let h = values._Time.getHours(),
+			m = values._Time.getMinutes();
+			
+		values.DueDate = values._Date;
+		values.DueDate.setHours(h, m);
 
-		values.DueDate =  `${_date} ${_time}`;
 
 		if (formView.validate()) {
 			values.id ? activities.updateItem(values.id, values) : activities.add(values);
