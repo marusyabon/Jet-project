@@ -7,6 +7,28 @@ export default class ContactsView extends JetView {
 		let list = {
 			rows: [
 				{
+					view: "toolbar",
+					elements: [
+						{
+							view: "text",
+							localId: "listFilter",
+							placeholder: "type to find matcing contacts",
+							on: {
+								"onTimedKeyPress": () => { 
+									let value = this.$$("listFilter").getValue().toLowerCase();
+									
+									this.$$("list").filter((obj) => {
+										for (let key in obj) {
+											if (obj[key].toString().toLowerCase().indexOf(value) != -1)
+												return true;
+										}
+									});
+								}
+							}
+						}
+					]
+				},
+				{
 					view: "list",
 					localId: "list",
 					width: 300,

@@ -11,6 +11,7 @@ export default class ActivitiesView extends JetView {
 				{
 					view: "tabbar",
 					value: "all",
+					localId: "actFilter",
 					optionWidth: 110,
 					options: [
 						{ "id": "all", "value": "All" },
@@ -18,9 +19,19 @@ export default class ActivitiesView extends JetView {
 						{ "id": "completed", "value": "Completed" },
 						{ "id": "today", "value": "Today" },
 						{ "id": "tomorrow", "value": "Tomorrow" },
-						{ "id": "this week", "value": "This week" },
-						{ "id": "this month", "value": "This month" }
-					]
+						{ "id": "thisWeek", "value": "This week" },
+						{ "id": "thisMonth", "value": "This month" }
+					],
+					on: {
+						"onChange":  () => {
+							this.$$("actTable").filterByAll();
+
+							this.$$("actTable").filter((obj) => {
+								let filter = this.$$("actFilter").getValue();
+								return this.actFiltering(obj, filter);								
+							});
+						}
+					}
 				},
 				{
 					view: "button",
@@ -108,5 +119,28 @@ export default class ActivitiesView extends JetView {
 	init() {
 		this.$$("actTable").sync(activities);
 		this.actForm = this.ui(ActivitiesForm);
+	}
+
+	actFiltering(obj, filter) {
+		let today = new Date(),
+			day = webix.Date.datePart(today),
+			week = webix.Date.weekStart(today),
+			month = webix.Date.monthStart(today),
+			tomorrow = webix.Date.add(day, 1, "day", true);
+
+		let actDate = obj.DueDate,
+			actDay = webix.Date.datePart(actDate),
+			actWeek = webix.Date.weekStart(actDate),
+			actMonth = webix.Date.monthStart(actDate);
+
+		switch(filter) {
+			case 'overdue':  return obj.State == 0 && actDate < today;
+			case 'completed': return obj.State == 1;
+			case 'today': return webix.Date.equal(day, actDay);
+			case 'tomorrow': return webix.Date.equal(tomorrow, actDay);
+			case 'thisWeek': return webix.Date.equal(week, actWeek);
+			case 'thisMonth':  return webix.Date.equal(month, actMonth);
+			default: return true;
+		}
 	}
 }
