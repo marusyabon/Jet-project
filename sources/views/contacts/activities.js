@@ -7,7 +7,6 @@ export default class ActivitiesTable extends JetView {
 	config() {
 
 		let _table = {
-			id: "Activities",
 			view: "datatable",
 			localId: "actTable",
 			select: true,
@@ -29,6 +28,7 @@ export default class ActivitiesTable extends JetView {
 					header: ["Due date", { content: "datepickerFilter" }],
 					sort: "date",
 					format: webix.Date.dateToStr("%d %M %y")
+					// format:webix.i18n.dateFormatStr
 				},
 				{
 					id: "Details",
@@ -65,7 +65,15 @@ export default class ActivitiesTable extends JetView {
 						}
 					});
 				}
-			}
+			},
+			on: {
+				onAfterFilter: () => {
+					let id = this.getParam("id", true);
+					this.$$("actTable").filter((obj) => {
+						return obj.ContactID == id;
+					}, "", true);
+				}
+			},
 		};
 
 		let _button = {
@@ -88,20 +96,32 @@ export default class ActivitiesTable extends JetView {
 
 	init() {
 		this.actForm = this.ui(ActivitiesForm);
+
+		this.on(this.app, "onContactDelete", () => {
+			let id = this.getParam("id", true);
+
+			let actToRemove = activities.find((item) => item.ContactID == id);
+			actToRemove.forEach((item) => {
+				activities.remove(item.id);
+			});
+		});
 	}
 
-	urlChange(view, url) {
-        activities.waitData.then(() => {
+	urlChange(view) {
+		activities.waitData.then(() => {
 			let id = this.getParam("id", true);
 			let dTable = view.queryView("datatable");
 
-            if (id) {
+			if (id) {
 				dTable.sync(activities, () => {
 					dTable.filter((item) => {
 						return item.ContactID == id;
-					})
+					});
 				});
-            }
-        });
-    }
-};
+			}
+		});
+		
+		// clear filter
+		// this.$$("actTable").getFilter("Details").setValue("");
+	}
+}

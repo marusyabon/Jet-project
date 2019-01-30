@@ -107,6 +107,6 @@ export default class ActivitiesView extends JetView {
 
 	init() {
 		this.$$("actTable").sync(activities);
-		this.contForm = this.ui(ActivitiesForm);
+		this.actForm = this.ui(ActivitiesForm);
 	}
 }

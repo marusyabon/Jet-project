@@ -49,11 +49,11 @@ export default class ContactsView extends JetView {
 		this.$$("list").sync(contacts);
 
 		this.on(this.app, "onContactDelete", () => {
-            let id = contacts.getFirstId();
+			let id = contacts.getFirstId();
 			if (id) {
 				view.queryView("list").select(id);
 			}
-        })
+		});
 	}
 
 	urlChange() {

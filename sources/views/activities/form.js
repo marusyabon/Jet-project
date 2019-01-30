@@ -98,8 +98,7 @@ export default class ActivitiesForm extends JetView {
 
 			let _contactId = this.getParam("id", true);
 			if (_contactId) {
-				let targetContact = contacts.getItem(_contactId);
-				this.$$("ContactID").setValue(targetContact.id);
+				this.$$("ContactID").setValue(_contactId);
 				this.$$("ContactID").disable();
 			}
 		}
