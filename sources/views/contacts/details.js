@@ -6,6 +6,8 @@ import FilesTable from "./files";
 
 export default class ContactDetails extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		let contactTitle = {
 			view: "label",
 			css: "contact_title",
@@ -16,7 +18,7 @@ export default class ContactDetails extends JetView {
 			cols: [
 				{
 					view: "button",
-					label: "Delete",
+					label: _("Delete"),
 					type: "icon",
 					icon: "fas fa-trash-alt",
 					width: 100,
@@ -26,7 +28,7 @@ export default class ContactDetails extends JetView {
 				},
 				{
 					view: "button",
-					label: "Edit",
+					label: _("Edit"),
 					type: "icon",
 					icon: "fas fa-edit",
 					width: 100,
@@ -76,12 +78,12 @@ export default class ContactDetails extends JetView {
 					rows: [
 						{
 							view: "tabbar",
-							value: "Activities",
+							value: _("Activities"),
 							multiview: true,
 							optionWidth: 150,
 							options: [
-								{ value: "Activities", id: "Activities" },
-								{ value: "Files", id: "Files" }
+								{ value: _("Activities"), id: "Activities" },
+								{ value: _("Files"), id: "Files" }
 							]
 						},
 						{
@@ -117,9 +119,10 @@ export default class ContactDetails extends JetView {
 	}
 
 	removeContact() {
+		const _ = this.app.getService("locale")._;
 		webix.confirm({
-			title: "Remove this?",
-			text: "action cannot be undone",
+			title: _("Confirm_titile"),
+			text: _("Confirm_text"),
 			callback: (result) => {
 				if (result) {
 					this.app.callEvent("onContactDelete");

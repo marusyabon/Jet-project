@@ -3,6 +3,8 @@ import {JetView, plugins} from "webix-jet";
 export default class TopView extends JetView{
 	config(){
 
+		const _ = this.app.getService("locale")._;
+
 		let header = {
 			type:"header", template:this.app.config.name, css:"webix_header app_header"
 		};
@@ -13,9 +15,9 @@ export default class TopView extends JetView{
 			width:180, layout:"y", select:true,
 			template:"<span class='webix_icon #icon#'></span> #value# ",
 			data:[
-				{ value:"Contacts", id:"contacts.contacts", icon:"fas fa-user" },
-				{ value:"Settings", id:"settings", icon:"fas fa-cog" },
-				{ value:"Activities", id:"activities.activities", icon:"fas fa-calendar-alt" }
+				{ value:_("Contacts"), id:"contacts.contacts", icon:"fas fa-user" },
+				{ value:_("Settings"), id:"settings", icon:"fas fa-cog" },
+				{ value:_("Activities"), id:"activities.activities", icon:"fas fa-calendar-alt" }
 			]
 		};
 

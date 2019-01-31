@@ -6,6 +6,8 @@ import { contacts } from "models/contacts";
 
 export default class ActivitiesView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		let tabBar = {
 			cols: [
 				{
@@ -14,28 +16,27 @@ export default class ActivitiesView extends JetView {
 					localId: "actFilter",
 					optionWidth: 110,
 					options: [
-						{ "id": "all", "value": "All" },
-						{ "id": "overdue", "value": "Overdue" },
-						{ "id": "completed", "value": "Completed" },
-						{ "id": "today", "value": "Today" },
-						{ "id": "tomorrow", "value": "Tomorrow" },
-						{ "id": "thisWeek", "value": "This week" },
-						{ "id": "thisMonth", "value": "This month" }
+						{ "id": "all", "value": _("All") },
+						{ "id": "overdue", "value": _("Overdue") },
+						{ "id": "completed", "value": _("Completed") },
+						{ "id": "today", "value": _("Today") },
+						{ "id": "tomorrow", "value": _("Tomorrow") },
+						{ "id": "thisWeek", "value": _("This week") },
+						{ "id": "thisMonth", "value": _("This month") }
 					],
 					on: {
 						"onChange":  () => {
 							this.$$("actTable").filterByAll();
-
 							this.$$("actTable").filter((obj) => {
 								let filter = this.$$("actFilter").getValue();
 								return this.actFiltering(obj, filter);								
-							});
+							}, "", true);
 						}
 					}
 				},
 				{
 					view: "button",
-					label: "Add activity",
+					label: _("Add activity"),
 					type: "icon",
 					icon: "fas fa-plus-square",
 					width: 100,
@@ -58,25 +59,25 @@ export default class ActivitiesView extends JetView {
 				{
 					id: "TypeID",
 					sort: "text",
-					header: ["Activity type", { content: "selectFilter" }],
+					header: [_("Activity type"), { content: "selectFilter" }],
 					options: activitytypes
 				},
 				{
 					id: "DueDate",
-					header: ["Due date", { content: "datepickerFilter" }],
+					header: [_("Due date"), { content: "datepickerFilter" }],
 					sort: "date",
 					format: webix.Date.dateToStr("%d %M %y")
 				},
 				{
 					id: "Details",
 					sort: "text",
-					header: ["Details", { content: "textFilter" }],
+					header: [_("Details"), { content: "textFilter" }],
 					fillspace: true
 				},
 				{
 					id: "ContactID",
 					sort: "text",
-					header: ["Contact", { content: "selectFilter" }],
+					header: [_("Contact"), { content: "selectFilter" }],
 					options: contacts
 				},
 				{
@@ -98,8 +99,8 @@ export default class ActivitiesView extends JetView {
 				},
 				"wxi-trash": function (e, id) {
 					webix.confirm({
-						title: "Remove this?",
-						text: "action cannot be undone",
+						title: _("Confirm_titile"),
+						text: _("Confirm_text"),
 						callback: function (result) {
 							if (result) {
 								activities.remove(id);
@@ -107,6 +108,14 @@ export default class ActivitiesView extends JetView {
 							return false;
 						}
 					});
+				}
+			},
+			on: {
+				onAfterFilter: () => {
+					this.$$("actTable").filter((obj) => {
+						let filter = this.$$("actFilter").getValue();
+						return this.actFiltering(obj, filter);								
+					}, "", true);
 				}
 			},
 		};

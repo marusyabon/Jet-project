@@ -3,6 +3,8 @@ import {contacts} from "models/contacts";
 
 export default class ContactsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		let userInfo = "<div class='user_icon'></div><p class='user_name'>#FirstName# #LastName#</p><p class='user_email'>#Email#</p>";
 		let list = {
 			rows: [
@@ -47,7 +49,7 @@ export default class ContactsView extends JetView {
 				{
 					view: "button",
 					type: "form",
-					value: "Add",
+					value: _("Add"),
 					click: () => {
 						let id = this.getParam("id", true);
 						this.show(`/top/contacts.contacts?id=${id}&new=true/contacts.form`);
