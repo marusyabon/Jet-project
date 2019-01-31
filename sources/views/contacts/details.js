@@ -117,6 +117,7 @@ export default class ContactDetails extends JetView {
 	}
 
 	removeContact() {
+		
 		webix.confirm({
 			title: "Remove this?",
 			text: "action cannot be undone",

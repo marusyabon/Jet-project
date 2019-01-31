@@ -3,7 +3,10 @@ import {contacts} from "models/contacts";
 
 export default class ContactsView extends JetView {
 	config() {
-		let userInfo = "<div class='user_icon'></div><p class='user_name'>#FirstName# #LastName#</p><p class='user_email'>#Email#</p>";
+		let userInfo = obj => `<div class='user_icon'>\
+							<img src="${obj.Photo ? obj.Photo : 'https://cs.unc.edu/~csturton/HWSecurityatUNC/images/person.png'}" />\
+						</div>\
+						<p class='user_name'>${obj.FirstName} ${obj.LastName}</p><p class='user_email'>${obj.Email}</p>`;
 		let list = {
 			rows: [
 				{
@@ -19,6 +22,9 @@ export default class ContactsView extends JetView {
 					on: {
 						"onAfterSelect": (id) => {
 							this.show(`/top/contacts.contacts?id=${id}/contacts.details`);
+						},
+						"data->onIdChange": (oldId, newId) => {
+							this.show(`/top/contacts.contacts?id=${newId}/contacts.details`);
 						}
 					},
 				},
@@ -45,13 +51,13 @@ export default class ContactsView extends JetView {
 		};
 	}
 
-	init(view) {
+	init() {
 		this.$$("list").sync(contacts);
 
 		this.on(this.app, "onContactDelete", () => {
 			let id = contacts.getFirstId();
 			if (id) {
-				view.queryView("list").select(id);
+				this.$$("list").select(id);
 			}
 		});
 	}

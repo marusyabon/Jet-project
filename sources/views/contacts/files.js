@@ -6,6 +6,7 @@ export default class FilesTable extends JetView {
 
 		let _table = {
 			view: "datatable",
+			localId: "filesTable",
 			select: true,
 			autoConfig: true,
 			columns: [
@@ -97,10 +98,10 @@ export default class FilesTable extends JetView {
 		});
 	}
 
-	urlChange(view) {
+	urlChange() {
 		files.waitData.then(() => {
 			let id = this.getParam("id", true);
-			let dTable = view.queryView("datatable");
+			let dTable = this.$$("filesTable");
 
 			if (id) {
 				dTable.sync(files, () => {
