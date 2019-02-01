@@ -37,6 +37,8 @@ export default {
 	"Name": "Name",
 	"Change Date": "Change Date",
 	"Size": "Size",
+	"Icon": "Icon",
+	"Type name": "Name",
 
 	// confirmations
 

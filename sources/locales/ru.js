@@ -37,6 +37,8 @@ export default {
 	"Name": "Имя",
 	"Change Date": "Дата изменения",
 	"Size": "Размер",
+	"Icon": "Иконка",
+	"Type name": "Название",
 
 	// confirmations
 

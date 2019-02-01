@@ -131,7 +131,8 @@ export default class ContactsForm extends JetView {
 			],
 			rules: {
 				"FirstName": webix.rules.isNotEmpty,
-				"LastName": webix.rules.isNotEmpty
+				"LastName": webix.rules.isNotEmpty,
+				"StatusID": webix.rules.isNotEmpty
 			}		
 		};
 	}
@@ -150,7 +151,8 @@ export default class ContactsForm extends JetView {
 
 			if (!isNew && id && contacts.exists(id)) {
 				let contactData = webix.copy(contacts.getItem(id));
-				contactData.status = statuses.getItem(contactData.StatusID).Value;
+				let flag = statuses.exists(contactData.StatusID)
+				contactData.status = flag ? statuses.getItem(contactData.StatusID).Value : {};
 
 				this.$$("cPhoto").setValues(contactData);
 				this.$$("contactForm").setValues(contactData);
@@ -168,14 +170,9 @@ export default class ContactsForm extends JetView {
 		const values = formView.getValues();
 		debugger
 		if (formView.validate()) {
-			if (values.id) {
-				contacts.updateItem(values.id, values);
-				//this.show(`/top/contacts.contacts?id=${values.id}/contacts.details`);
-			}
-			else {
-				contacts.add(values);
-				//this.show(`/top/contacts.contacts?id=${values.id}/contacts.details`);
-			} 
+			values.id ? contacts.updateItem(values.id, values) : contacts.add(values);
+			
+			this.show(`/top/contacts.contacts?id=${values.id}/contacts.details`);
 			
 			formView.clearValidation();
 			formView.clear();

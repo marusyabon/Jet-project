@@ -107,7 +107,8 @@ export default class ContactDetails extends JetView {
 			let id = this.getParam("id", true);
 			if (id && contacts.exists(id)) {
 				let contactData = webix.copy(contacts.getItem(id));
-				contactData.status = (contactData.StatusID != 0 ) ? statuses.getItem(contactData.StatusID).Value : {};
+				let flag = statuses.exists(contactData.StatusID)
+				contactData.status = flag ? statuses.getItem(contactData.StatusID).Value : 'Unset';
 
 				let format = webix.Date.dateToStr("%d-%m-%Y");
 				contactData.Birthday = format(contactData.Birthday);

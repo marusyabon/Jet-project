@@ -29,7 +29,6 @@ export default class ActivitiesTable extends JetView {
 					header: [_("Due date"), { content: "datepickerFilter" }],
 					sort: "date",
 					format: webix.Date.dateToStr("%d %M %y")
-					// format:webix.i18n.dateFormatStr
 				},
 				{
 					id: "Details",
@@ -124,8 +123,5 @@ export default class ActivitiesTable extends JetView {
 				});
 			}
 		});
-		
-		// clear filter
-		// this.$$("actTable").getFilter("Details").setValue("");
 	}
 }

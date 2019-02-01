@@ -1,10 +1,14 @@
 import { JetView } from "webix-jet";
+import DataTable from "./dtable";
+import { activitytypes } from "models/activitytypes";
+import { statuses } from "models/statuses";
 
 export default class SettingsView extends JetView {
 	config() {
 		const lang = this.app.getService("locale").getLang();
+		const _ = this.app.getService("locale")._;
 
-		return {
+		let switcher = {
 			rows: [
 				{
 					view: "segmented", multiview: true, value: lang, name: "lang",
@@ -14,7 +18,23 @@ export default class SettingsView extends JetView {
 					],
 					click: () => this.toggleLanguage(),
 				},
-				{}
+				{ height: 30 }
+			]
+		}
+
+		return {
+			rows: [
+				switcher,
+				{
+					cols: [
+						{
+							$subview: new DataTable(this.app, "", activitytypes, _("Activity types"))
+						},
+						{
+							$subview: new DataTable(this.app, "", statuses, _("Statuses"))
+						}
+					]
+				}
 			]
 		};
 	}

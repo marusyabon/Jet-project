@@ -16,7 +16,7 @@ export default class TopView extends JetView{
 			template:"<span class='webix_icon #icon#'></span> #value# ",
 			data:[
 				{ value:_("Contacts"), id:"contacts.contacts", icon:"fas fa-user" },
-				{ value:_("Settings"), id:"settings", icon:"fas fa-cog" },
+				{ value:_("Settings"), id:"settings.settings", icon:"fas fa-cog" },
 				{ value:_("Activities"), id:"activities.activities", icon:"fas fa-calendar-alt" }
 			]
 		};

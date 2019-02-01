@@ -3,6 +3,8 @@ import {contacts} from "models/contacts";
 
 export default class ContactsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+		
 		let userInfo = obj => `<div class='user_icon'>\
 							<img src="${obj.Photo ? obj.Photo : 'https://cs.unc.edu/~csturton/HWSecurityatUNC/images/person.png'}" />\
 						</div>\
