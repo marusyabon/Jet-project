@@ -120,6 +120,7 @@ export default class ContactDetails extends JetView {
 
 	removeContact() {
 		const _ = this.app.getService("locale")._;
+		
 		webix.confirm({
 			title: _("Confirm_titile"),
 			text: _("Confirm_text"),
