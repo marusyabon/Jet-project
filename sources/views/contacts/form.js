@@ -138,8 +138,8 @@ export default class ContactsForm extends JetView {
 
 	init() {
 		const _ = this.app.getService("locale")._;
-		
 		contacts.waitData.then(() => {
+
 			const id = this.getParam("id", true);
 			const isNew = this.getParam("new", true);
 			
@@ -156,6 +156,8 @@ export default class ContactsForm extends JetView {
 				this.$$("contactForm").setValues(contactData);
 			}
 		});
+
+		
 	}
 
 	saveForm () {
@@ -164,13 +166,19 @@ export default class ContactsForm extends JetView {
 		let photoUrl = this.$$("cPhoto").getValues();
 		this.$$("Photo").setValue(photoUrl.Photo);
 		const values = formView.getValues();
-		
+		debugger
 		if (formView.validate()) {
-			values.id ? contacts.updateItem(values.id, values) : contacts.add(values);
+			if (values.id) {
+				contacts.updateItem(values.id, values);
+				//this.show(`/top/contacts.contacts?id=${values.id}/contacts.details`);
+			}
+			else {
+				contacts.add(values);
+				//this.show(`/top/contacts.contacts?id=${values.id}/contacts.details`);
+			} 
 			
 			formView.clearValidation();
 			formView.clear();
-			this.show(`/top/contacts.contacts?id=${values.id}/contacts.details`);
 		}
 	}
 }

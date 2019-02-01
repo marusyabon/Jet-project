@@ -43,7 +43,7 @@ export default class ContactDetails extends JetView {
 		let contactCard = {
 			localId: "contactCard",
 			minHeight: 270,
-			template: contact => {
+			template: (contact) => {
 				return (
 					`<div class="col contact_card">
 						<div class="photo_wrap contact_avatar">
@@ -107,7 +107,7 @@ export default class ContactDetails extends JetView {
 			let id = this.getParam("id", true);
 			if (id && contacts.exists(id)) {
 				let contactData = webix.copy(contacts.getItem(id));
-				contactData.status = statuses.getItem(contactData.StatusID).Value;
+				contactData.status = (contactData.StatusID != 0 ) ? statuses.getItem(contactData.StatusID).Value : {};
 
 				let format = webix.Date.dateToStr("%d-%m-%Y");
 				contactData.Birthday = format(contactData.Birthday);
