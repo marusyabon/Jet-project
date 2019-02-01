@@ -51,9 +51,17 @@ export default class DataTable extends JetView{
 			view: "button",
 			label: _("Delete"),
 			click: () => {
-				let item = this.getRoot().queryView({view:"datatable"}).getSelectedId()
-				this._tdata.remove(item);
-				return false
+				webix.confirm({
+					title: _("Confirm_titile"),
+					text: _("Confirm_text"),
+					callback: (result) => {
+						if (result) {
+							let item = this.getRoot().queryView({view:"datatable"}).getSelectedId();
+							this._tdata.remove(item);
+						}
+						return false;
+					}
+				});
 			}
 		};
 
@@ -67,7 +75,7 @@ export default class DataTable extends JetView{
 					]
 				}
 			]
-		}
+		};
 	}
 
 	init(view){

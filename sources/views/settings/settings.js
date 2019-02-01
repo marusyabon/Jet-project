@@ -20,7 +20,7 @@ export default class SettingsView extends JetView {
 				},
 				{ height: 30 }
 			]
-		}
+		};
 
 		return {
 			rows: [

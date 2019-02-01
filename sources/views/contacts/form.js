@@ -151,15 +151,13 @@ export default class ContactsForm extends JetView {
 
 			if (!isNew && id && contacts.exists(id)) {
 				let contactData = webix.copy(contacts.getItem(id));
-				let flag = statuses.exists(contactData.StatusID)
+				let flag = statuses.exists(contactData.StatusID);
 				contactData.status = flag ? statuses.getItem(contactData.StatusID).Value : {};
 
 				this.$$("cPhoto").setValues(contactData);
 				this.$$("contactForm").setValues(contactData);
 			}
 		});
-
-		
 	}
 
 	saveForm () {
@@ -168,7 +166,7 @@ export default class ContactsForm extends JetView {
 		let photoUrl = this.$$("cPhoto").getValues();
 		this.$$("Photo").setValue(photoUrl.Photo);
 		const values = formView.getValues();
-		debugger
+		
 		if (formView.validate()) {
 			values.id ? contacts.updateItem(values.id, values) : contacts.add(values);
 			
