@@ -1,39 +1,12 @@
-import { JetView } from "webix-jet";
-import ActivitiesForm from "./form";
+import {JetView} from "webix-jet";
 import { activities } from "models/activities";
 import { activitytypes } from "models/activitytypes";
-import { contacts } from "models/contacts";
+import ActivitiesForm from "../activities/form";
 
-export default class ActivitiesView extends JetView {
+export default class ActivitiesTable extends JetView {
 	config() {
-		let tabBar = {
-			cols: [
-				{
-					view: "tabbar",
-					value: "all",
-					optionWidth: 110,
-					options: [
-						{ "id": "all", "value": "All" },
-						{ "id": "overdue", "value": "Overdue" },
-						{ "id": "completed", "value": "Completed" },
-						{ "id": "today", "value": "Today" },
-						{ "id": "tomorrow", "value": "Tomorrow" },
-						{ "id": "this week", "value": "This week" },
-						{ "id": "this month", "value": "This month" }
-					]
-				},
-				{
-					view: "button",
-					label: "Add activity",
-					type: "icon",
-					icon: "fas fa-plus-square",
-					width: 100,
-					click: () => { this.actForm.showWindow(); }
-				}
-			]
-		};
 
-		let actTable = {
+		let _table = {
 			view: "datatable",
 			localId: "actTable",
 			select: true,
@@ -55,18 +28,13 @@ export default class ActivitiesView extends JetView {
 					header: ["Due date", { content: "datepickerFilter" }],
 					sort: "date",
 					format: webix.Date.dateToStr("%d %M %y")
+					// format:webix.i18n.dateFormatStr
 				},
 				{
 					id: "Details",
 					sort: "text",
 					header: ["Details", { content: "textFilter" }],
 					fillspace: true
-				},
-				{
-					id: "ContactID",
-					sort: "text",
-					header: ["Contact", { content: "selectFilter" }],
-					options: contacts
 				},
 				{
 					id: "EditAct",
@@ -92,21 +60,71 @@ export default class ActivitiesView extends JetView {
 						callback: function (result) {
 							if (result) {
 								activities.remove(id);
+								return false;
 							}
-							return false;
 						}
 					});
 				}
 			},
+			on: {
+				onAfterFilter: () => {
+					let id = this.getParam("id", true),
+						actTable = this.$$("actTable");
+					actTable.blockEvent();
+					actTable.filter((obj) => {
+						return obj.ContactID == id;
+					}, "", true);
+					actTable.unblockEvent();
+				}
+			},
+		};
+
+		let _button = {
+			view: "button",
+			label: "Add activity",
+			type: "icon",
+			css: "btn",
+			icon: "fas fa-plus-square",
+			width: 100,
+			click: () => { this.actForm.showWindow(); }
 		};
 
 		return {
-			rows: [tabBar, actTable]
+			rows: [
+				_table,
+				{ cols: [ {}, _button ] }
+			]
 		};
 	}
 
 	init() {
-		this.$$("actTable").sync(activities);
 		this.actForm = this.ui(ActivitiesForm);
+
+		this.on(this.app, "onContactDelete", () => {
+			let id = this.getParam("id", true);
+
+			let actToRemove = activities.find((item) => item.ContactID == id);
+			actToRemove.forEach((item) => {
+				activities.remove(item.id);
+			});
+		});
+	}
+
+	urlChange() {
+		activities.waitData.then(() => {
+			let id = this.getParam("id", true);
+			let dTable = this.$$("actTable");
+
+			if (id) {
+				dTable.sync(activities, () => {
+					dTable.filter((item) => {
+						return item.ContactID == id;
+					});
+				});
+			}
+		});
+		
+		// clear filter
+		// this.$$("actTable").getFilter("Details").setValue("");
 	}
 }

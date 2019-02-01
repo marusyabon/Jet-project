@@ -3,13 +3,13 @@ import { contacts } from "models/contacts";
 import { activities } from "models/activities";
 import { activitytypes } from "models/activitytypes";
 
-export default class ContactsForm extends JetView {
+export default class ActivitiesForm extends JetView {
 	config() {
 
 		return {
 			view: "window",
-			head: "Add activity",
 			localId: "formPopup",
+			head: "Add activity",
 			width: 600,
 			height: 400,
 			position:"center",
@@ -19,7 +19,7 @@ export default class ContactsForm extends JetView {
 				elements: [
 					{ view: "textarea", label: "Details", name: "Details" },
 					{ view: "combo", label: "Type", name: "TypeID", options: { body: { template: "#Value#", data: activitytypes } } },
-					{ view: "combo", label: "Contact", name: "ContactID", options: { body: { template: "#FirstName# #LastName#", data: contacts } } },
+					{ view: "combo", label: "Contact", name: "ContactID", localId: "ContactID", options: { body: { template: "#FirstName# #LastName#", data: contacts } } },
 					{
 						margin: 20,
 						cols: [
@@ -48,7 +48,7 @@ export default class ContactsForm extends JetView {
 						margin: 20,
 						cols: [
 							{
-								view: "button", value: "Add", type: "form", localId: "saveBtn",
+								view: "button", type: "form", localId: "saveBtn",
 								click: () => {
 									this.saveForm();
 								}
@@ -93,6 +93,14 @@ export default class ContactsForm extends JetView {
 		else {
 			this.$$("saveBtn").setValue("Add");
 			this.$$("formPopup").getHead().setHTML("Add activity");
+
+			// check if contact card is open
+
+			let _contactId = this.getParam("id", true);
+			if (_contactId) {
+				this.$$("ContactID").setValue(_contactId);
+				this.$$("ContactID").disable();
+			}
 		}
 		
 		this.getRoot().show();
@@ -101,7 +109,7 @@ export default class ContactsForm extends JetView {
 	saveForm() {
 		let formView = this.$$("formView");
 		const values = formView.getValues();
-
+		
 		let h = values._Time.getHours(),
 			m = values._Time.getMinutes();
 			

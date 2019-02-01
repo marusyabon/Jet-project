@@ -21,10 +21,6 @@
             "tab",
             {"SwitchCase":1}
         ],
-        "quotes": [
-            "error",
-            "double"
-        ],
         "semi": [
             "error",
             "always"

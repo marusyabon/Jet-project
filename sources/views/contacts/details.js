@@ -1,6 +1,8 @@
 import { JetView } from "webix-jet";
 import { contacts } from "models/contacts";
 import { statuses } from "models/statuses";
+import ActivitiesTable from "./activities";
+import FilesTable from "./files";
 
 export default class ContactDetails extends JetView {
 	config() {
@@ -17,24 +19,34 @@ export default class ContactDetails extends JetView {
 					label: "Delete",
 					type: "icon",
 					icon: "fas fa-trash-alt",
-					width: 100
+					width: 100,
+					click: () => {
+						this.removeContact();
+					}
 				},
 				{
 					view: "button",
 					label: "Edit",
 					type: "icon",
 					icon: "fas fa-edit",
-					width: 100
+					width: 100,
+					click: () => {
+						let id = this.getParam("id", true);
+						this.show(`/top/contacts.contacts?id=${id}/contacts.form`);
+					}
 				}
 			]
 		};
 
 		let contactCard = {
 			localId: "contactCard",
+			minHeight: 270,
 			template: contact => {
 				return (
 					`<div class="col contact_card">
-						<div class="contact_avatar" style="background-image: url(${contact.Photo ? contact.Photo : "https://cs.unc.edu/~csturton/HWSecurityatUNC/images/person.png"});"></div>
+						<div class="photo_wrap contact_avatar">
+							<img src="${contact.Photo ? contact.Photo : 'https://cs.unc.edu/~csturton/HWSecurityatUNC/images/person.png'}" />
+						</div>
 						<p class="contact_status">${contact.status}</p>
 					</div>
 						<div class="col icon_p">
@@ -47,7 +59,7 @@ export default class ContactDetails extends JetView {
 						<p><i class="fas fa-calendar-alt"></i>${contact.Birthday}</p>
 						<p><i class="fas fa-map-marker-alt"></i>${contact.Address}</p>
 					</div>`
-				);	
+				);
 			}
 		};
 
@@ -60,8 +72,27 @@ export default class ContactDetails extends JetView {
 					height: 10
 				},
 				contactCard,
-				{}
-
+				{
+					rows: [
+						{
+							view: "tabbar",
+							value: "Activities",
+							multiview: true,
+							optionWidth: 150,
+							options: [
+								{ value: "Activities", id: "Activities" },
+								{ value: "Files", id: "Files" }
+							]
+						},
+						{
+							id: "mymultiview",
+							cells: [
+								{ id: "Activities", $subview: ActivitiesTable },
+								{ id: "Files", $subview: FilesTable }
+							]
+						}
+					]
+				}
 			]
 		};
 	}
@@ -71,16 +102,32 @@ export default class ContactDetails extends JetView {
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
-			const id = this.getParam("id");
+			let id = this.getParam("id", true);
 			if (id && contacts.exists(id)) {
 				let contactData = webix.copy(contacts.getItem(id));
 				contactData.status = statuses.getItem(contactData.StatusID).Value;
-                
+
 				let format = webix.Date.dateToStr("%d-%m-%Y");
 				contactData.Birthday = format(contactData.Birthday);
 
 				this.$$("contactTitle").setValue(contactData.FirstName + " " + contactData.LastName);
 				this.$$("contactCard").setValues(contactData);
+			}
+		});
+	}
+
+	removeContact() {
+		
+		webix.confirm({
+			title: "Remove this?",
+			text: "action cannot be undone",
+			callback: (result) => {
+				if (result) {
+					this.app.callEvent("onContactDelete");
+
+					let id = this.getParam("id", true);
+					contacts.remove(id);
+				}
 			}
 		});
 	}
