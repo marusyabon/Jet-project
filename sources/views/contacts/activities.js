@@ -68,12 +68,13 @@ export default class ActivitiesTable extends JetView {
 			},
 			on: {
 				onAfterFilter: () => {
-					let id = this.getParam("id", true);
-					this.$$("actTable").blockEvent();
-					this.$$("actTable").filter((obj) => {
+					let id = this.getParam("id", true),
+						actTable = this.$$("actTable");
+					actTable.blockEvent();
+					actTable.filter((obj) => {
 						return obj.ContactID == id;
 					}, "", true);
-					this.$$("actTable").unblockEvent();
+					actTable.unblockEvent();
 				}
 			},
 		};
