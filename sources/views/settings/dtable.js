@@ -1,10 +1,11 @@
 import {JetView} from "webix-jet";
 
 export default class DataTable extends JetView{
-	constructor(app,name,data,label){
+	constructor(app,name,data,label,options){
 		super(app, name);
 		this._tdata = data;
 		this._label = label;
+		this._options = options;
 	}
 
 	config() {
@@ -31,9 +32,10 @@ export default class DataTable extends JetView{
 				},
 				{
 					id: "Icon",
-					sort: "text",
 					header: _("Icon"),
-					editor: "text"
+					template: "<i class='fas fa-#Icon#'></i> #Icon#",
+					editor: "richselect",
+					options: this._options
 				}
 			]
 		};

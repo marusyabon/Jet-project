@@ -30,6 +30,8 @@ export default {
 	// table labels
 	
 	"Activity type": "Тип занятости",
+	"Activity types": "Типы занятости",
+	"Statuses": "Статусы",
 	"Due date": "Дата",
 	"Details": "Детали",
 	"Contact": "Контакт",

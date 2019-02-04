@@ -30,6 +30,8 @@ export default {
 	// table labels
 
 	"Activity type": "Activity type",
+	"Activity types": "Activity types",
+	"Statuses": "Statuses",
 	"Due date": "Due date",
 	"Details": "Details",
 	"Contact": "Contact",

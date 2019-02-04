@@ -27,10 +27,6 @@ export default class ActivitiesView extends JetView {
 					on: {
 						"onChange":  () => {
 							this.$$("actTable").filterByAll();
-							this.$$("actTable").filter((obj) => {
-								let filter = this.$$("actFilter").getValue();
-								return this.actFiltering(obj, filter);								
-							}, "", true);
 						}
 					}
 				},
@@ -128,28 +124,41 @@ export default class ActivitiesView extends JetView {
 	init() {
 		this.$$("actTable").sync(activities);
 		this.actForm = this.ui(ActivitiesForm);
-	}
 
-	actFiltering(obj, filter) {
-		let today = new Date(),
-			day = webix.Date.datePart(today),
-			week = webix.Date.weekStart(today),
-			month = webix.Date.monthStart(today),
-			tomorrow = webix.Date.add(day, 1, "day", true);
+		this.$$("actTable").registerFilter(
+			this.$$("actFilter"),
+			{
+				compare: function (cellValue, filterValue, obj) {
+					let today = new Date(),
+						day = webix.Date.datePart(today),
+						week = webix.Date.weekStart(today),
+						month = webix.Date.monthStart(today),
+						tomorrow = webix.Date.add(day, 1, "day", true);
 
-		let actDate = obj.DueDate,
-			actDay = webix.Date.datePart(actDate),
-			actWeek = webix.Date.weekStart(actDate),
-			actMonth = webix.Date.monthStart(actDate);
+					let actDate = obj.DueDate,
+						actDay = webix.Date.datePart(actDate),
+						actWeek = webix.Date.weekStart(actDate),
+						actMonth = webix.Date.monthStart(actDate);
 
-		switch(filter) {
-			case 'overdue':  return obj.State == 0 && actDate < today;
-			case 'completed': return obj.State == 1;
-			case 'today': return webix.Date.equal(day, actDay);
-			case 'tomorrow': return webix.Date.equal(tomorrow, actDay);
-			case 'thisWeek': return webix.Date.equal(week, actWeek);
-			case 'thisMonth':  return webix.Date.equal(month, actMonth);
-			default: return true;
-		}
-	}
+					switch (filterValue) {
+						case 'overdue': return obj.State == 0 && actDate < today;
+						case 'completed': return obj.State == 1;
+						case 'today': return webix.Date.equal(day, actDay);
+						case 'tomorrow': return webix.Date.equal(tomorrow, actDay);
+						case 'thisWeek': return webix.Date.equal(week, actWeek);
+						case 'thisMonth': return webix.Date.equal(month, actMonth);
+						default: return true;
+					}
+				}
+			},
+			{
+				getValue: function (view) {
+					return view.getValue();
+				},
+				setValue: function (view, value) {
+					view.setValue(value);
+				}
+			}
+		);
+	}	
 }

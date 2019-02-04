@@ -21,11 +21,18 @@ export default class ContactsView extends JetView {
 							on: {
 								"onTimedKeyPress": () => { 
 									let value = this.$$("listFilter").getValue().toLowerCase();
+									let dateStr = webix.Date.dateToStr("%d %M %Y");
 									
 									this.$$("list").filter((obj) => {
 										for (let key in obj) {
-											if (obj[key].toString().toLowerCase().indexOf(value) != -1)
-												return true;
+											if(obj[key]){
+												if (typeof obj[key] === "string" && obj[key].toString().toLowerCase().indexOf(value) != -1) {
+													return true;
+												}
+												else if(obj[key] instanceof Date && dateStr(obj[key]).toLowerCase().indexOf(value) != -1) {
+													return true;
+												}
+											}
 										}
 									});
 								}

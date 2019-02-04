@@ -28,10 +28,21 @@ export default class SettingsView extends JetView {
 				{
 					cols: [
 						{
-							$subview: new DataTable(this.app, "", activitytypes, _("Activity types"))
+							$subview: new DataTable(this.app, "", activitytypes, _("Activity types"), [
+								"flag",
+								"comment",
+								"clock",
+								"phone",
+								"envelope"
+							])
 						},
 						{
-							$subview: new DataTable(this.app, "", statuses, _("Statuses"))
+							$subview: new DataTable(this.app, "", statuses, _("Statuses"), [
+								"sync",
+								"exclamation",
+								"clock",
+								"times"
+							])
 						}
 					]
 				}
