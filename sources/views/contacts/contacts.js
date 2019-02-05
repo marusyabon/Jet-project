@@ -3,12 +3,43 @@ import {contacts} from "models/contacts";
 
 export default class ContactsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+		
 		let userInfo = obj => `<div class='user_icon'>\
 							<img src="${obj.Photo ? obj.Photo : 'https://cs.unc.edu/~csturton/HWSecurityatUNC/images/person.png'}" />\
 						</div>\
 						<p class='user_name'>${obj.FirstName} ${obj.LastName}</p><p class='user_email'>${obj.Email}</p>`;
 		let list = {
 			rows: [
+				{
+					view: "toolbar",
+					elements: [
+						{
+							view: "text",
+							localId: "listFilter",
+							placeholder: "type to find matcing contacts",
+							on: {
+								"onTimedKeyPress": () => { 
+									let value = this.$$("listFilter").getValue().toLowerCase();
+									let dateStr = webix.Date.dateToStr("%d %M %Y");
+									
+									this.$$("list").filter((obj) => {
+										for (let key in obj) {
+											if(obj[key]){
+												if (typeof obj[key] === "string" && obj[key].toString().toLowerCase().indexOf(value) != -1) {
+													return true;
+												}
+												else if(obj[key] instanceof Date && dateStr(obj[key]).toLowerCase().indexOf(value) != -1) {
+													return true;
+												}
+											}
+										}
+									});
+								}
+							}
+						}
+					]
+				},
 				{
 					view: "list",
 					localId: "list",
@@ -31,7 +62,7 @@ export default class ContactsView extends JetView {
 				{
 					view: "button",
 					type: "form",
-					value: "Add",
+					value: _("Add"),
 					click: () => {
 						let id = this.getParam("id", true);
 						this.show(`/top/contacts.contacts?id=${id}&new=true/contacts.form`);

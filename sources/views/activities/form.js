@@ -5,11 +5,12 @@ import { activitytypes } from "models/activitytypes";
 
 export default class ActivitiesForm extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 
 		return {
 			view: "window",
 			localId: "formPopup",
-			head: "Add activity",
+			head: _("Add activity"),
 			width: 600,
 			height: 400,
 			position:"center",
@@ -17,9 +18,9 @@ export default class ActivitiesForm extends JetView {
 				view: "form",
 				localId: "formView",
 				elements: [
-					{ view: "textarea", label: "Details", name: "Details" },
-					{ view: "combo", label: "Type", name: "TypeID", options: { body: { template: "#Value#", data: activitytypes } } },
-					{ view: "combo", label: "Contact", name: "ContactID", localId: "ContactID", options: { body: { template: "#FirstName# #LastName#", data: contacts } } },
+					{ view: "textarea", label: _("Details"), name: "Details" },
+					{ view: "combo", label: _("Type"), name: "TypeID", options: { body: { template: "#Value#", data: activitytypes } } },
+					{ view: "combo", label: _("Contact"), name: "ContactID", localId: "ContactID", options: { body: { template: "#FirstName# #LastName#", data: contacts } } },
 					{
 						margin: 20,
 						cols: [
@@ -28,12 +29,12 @@ export default class ActivitiesForm extends JetView {
 								value: new Date(),
 								name: "_Date",
 								localId: "_Date",
-								label: "Date"
+								label: _("Date")
 							},
 							{
 								view: "datepicker",
 								type: "time",
-								label: "Time",
+								label: _("Time"),
 								localId: "_Time",
 								name: "_Time"
 							},
@@ -42,7 +43,7 @@ export default class ActivitiesForm extends JetView {
 					{
 						view: "checkbox",
 						name: "State",
-						label: "Completed"
+						label: _("Completed")
 					},
 					{
 						margin: 20,
@@ -54,7 +55,7 @@ export default class ActivitiesForm extends JetView {
 								}
 							},
 							{
-								view: "button", value: "Cancel",
+								view: "button", value: _("Cancel"),
 								click: () => {
 									this.getRoot().hide();
 								}
@@ -72,13 +73,15 @@ export default class ActivitiesForm extends JetView {
 	}
 
 	showWindow(id) {
+		const _ = this.app.getService("locale")._;
+
 		let formView = this.$$("formView");
 		formView.clearValidation();
 		formView.clear();
 
 		if (id && activities.exists(id)) {
-			this.$$("saveBtn").setValue("Save");
-			this.$$("formPopup").getHead().setHTML("Edit activity");
+			this.$$("saveBtn").setValue(_("Save"));
+			this.$$("formPopup").getHead().setHTML(_("Edit activity"));
 
 			let values = webix.copy(activities.getItem(id));
 
@@ -91,8 +94,8 @@ export default class ActivitiesForm extends JetView {
 		}
 
 		else {
-			this.$$("saveBtn").setValue("Add");
-			this.$$("formPopup").getHead().setHTML("Add activity");
+			this.$$("saveBtn").setValue(_("Add"));
+			this.$$("formPopup").getHead().setHTML(_("Add activity"));
 
 			// check if contact card is open
 

@@ -5,6 +5,7 @@ import ActivitiesForm from "../activities/form";
 
 export default class ActivitiesTable extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 
 		let _table = {
 			view: "datatable",
@@ -20,20 +21,19 @@ export default class ActivitiesTable extends JetView {
 				{
 					id: "TypeID",
 					sort: "text",
-					header: ["Activity type", { content: "selectFilter" }],
+					header: [_("Activity type"), { content: "selectFilter" }],
 					options: activitytypes
 				},
 				{
 					id: "DueDate",
-					header: ["Due date", { content: "datepickerFilter" }],
+					header: [_("Due date"), { content: "datepickerFilter" }],
 					sort: "date",
 					format: webix.Date.dateToStr("%d %M %y")
-					// format:webix.i18n.dateFormatStr
 				},
 				{
 					id: "Details",
 					sort: "text",
-					header: ["Details", { content: "textFilter" }],
+					header: [_("Details"), { content: "textFilter" }],
 					fillspace: true
 				},
 				{
@@ -55,8 +55,8 @@ export default class ActivitiesTable extends JetView {
 				},
 				"wxi-trash": function (e, id) {
 					webix.confirm({
-						title: "Remove this?",
-						text: "action cannot be undone",
+						title: _("Confirm_titile"),
+						text: _("Confirm_text"),
 						callback: function (result) {
 							if (result) {
 								activities.remove(id);
@@ -81,7 +81,7 @@ export default class ActivitiesTable extends JetView {
 
 		let _button = {
 			view: "button",
-			label: "Add activity",
+			label: _("Add activity"),
 			type: "icon",
 			css: "btn",
 			icon: "fas fa-plus-square",
@@ -123,8 +123,5 @@ export default class ActivitiesTable extends JetView {
 				});
 			}
 		});
-		
-		// clear filter
-		// this.$$("actTable").getFilter("Details").setValue("");
 	}
 }

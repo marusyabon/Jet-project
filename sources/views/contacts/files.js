@@ -3,6 +3,7 @@ import { files } from "models/files";
 
 export default class FilesTable extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 
 		let _table = {
 			view: "datatable",
@@ -12,14 +13,14 @@ export default class FilesTable extends JetView {
 			columns: [
 				{
 					id: "FileName",
-					header: "Name",
+					header: _("Name"),
 					sort: "text",
 					fillspace: true
 				},
 				{
 					id: "FileDate",
 					sort: "date",
-					header: "Change Date",
+					header: _("Change Date"),
 					format:function(val){ 
 						return webix.Date.dateToStr("%d %M %y")(val);
 					}
@@ -27,7 +28,7 @@ export default class FilesTable extends JetView {
 				{
 					id: "FileSize",
 					sort: "int",
-					header: "Size"
+					header: _("Size")
 				},
 				{
 					header: "",
@@ -53,7 +54,7 @@ export default class FilesTable extends JetView {
 
 		let _button = { 
 			view: "uploader", 
-			label: "Upload file",
+			label: _("Upload file"),
 			localId: "fileUploader",
 			type: "icon",
 			icon: "fas fa-cloud-upload-alt",
