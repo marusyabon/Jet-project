@@ -35,7 +35,12 @@ export default class DataTable extends JetView{
 					header: _("Icon"),
 					template: "<i class='fas fa-#Icon#'></i> #Icon#",
 					editor: "richselect",
-					options: this._options
+					suggest: {
+						body: {
+							data: this._options,
+							template: "<i class='fas fa-#value#'></i> #value#"
+						}
+					}
 				}
 			]
 		};
